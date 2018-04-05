@@ -1,16 +1,18 @@
 -module(tss).
--behaviour(gen_server).
+%-behaviour(gen_server).
 
 -compile(export_all).
 
 init([]) -> [].
 
-sign_document(Document) -> ok.
+sign_document(_ID, _Hash) ->
+    receive
+        {} -> ok
+    end.
 
 loop() -> 
     receive
         _ -> ok
     after 5000 ->
-        {error, timeout},
-        loop()
+        {error, timeout}
     end.
