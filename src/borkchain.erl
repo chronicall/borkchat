@@ -1,5 +1,5 @@
 -module(borkchain).
--compile(export_all).
+-export([start/0, terminate/0, init/0, sign_document/2, query_length/0]).
 
 -record(borkchain, {the_chain}). % List of blocks, the chain
 -record(block, {seq_nr,
@@ -8,13 +8,9 @@
                 hash,
                 link}).
 
+%%% Public API
 start() ->
     register(?MODULE, Pid=spawn(?MODULE, init, [])),
-    Pid.
-
-%% Probably not required.
-start_link() ->
-    register(?MODULE, Pid=spawn_link(?MODULE, init, [])),
     Pid.
 
 terminate() ->
@@ -38,6 +34,9 @@ sign_document(ID, Hash) ->
         {error, timeout}
     end.
 
+query_length() ->
+    ?MODULE ! length.
+
 %%% The server
 loop(B=#borkchain{}) ->
     receive
@@ -51,15 +50,14 @@ loop(B=#borkchain{}) ->
             Pid ! {successful, "New block added!"},
             print_chain(NewBork),
             loop(NewBork);
+        length ->
+            %% Prints out the length of the block chain
+            io:format("The length of the chain is ~p~n", [length(B#borkchain.the_chain)]),
+            loop(B#borkchain{});
         {exit, Reason} ->
             exit(Reason);
         shutdown ->
             exit(shutdown)
-    after 5000 ->
-        %% Prints out the length of the block chain atm
-        %% Lel.
-        io:format("The length of the chain is ~p~n", [length(B#borkchain.the_chain)]),
-        loop(B#borkchain{})
     end.
 
 %%% Private function?

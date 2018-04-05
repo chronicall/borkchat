@@ -40,6 +40,8 @@ borkchain:sign_document("Pupper", crypto:hash(sha512, "I am gud Doggo")).
 ```
 You can see the chain grow. The entire chain is printed out with each new block.
 
+You can also manually query for the length of the borkchain with `borkchain:query_length().`. This simply returns the length of the borkchain list.
+
 ## TODO
 - ~~Fix link information in the non-genesis blocks~~
   - ~~Hashing can only be done on a "string" or a <<"binary string">>~~
@@ -53,6 +55,9 @@ You can see the chain grow. The entire chain is printed out with each new block.
     - Add verified block?
     - Add block for verification?
     - ???
+- BORKervise the borkchain with BORKervisors.
+  - Ideally it would be a distributed server that multiple nodes handle running
+  - Failover/Takeover, etc.
 - Implement Mnesia for blockchain distribution and physical storage
   - Make records compatible with Mnesia so it makes sense
     - Watch out for name collisions!
