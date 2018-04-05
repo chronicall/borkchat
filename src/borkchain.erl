@@ -79,6 +79,7 @@ generate_genesis_block(B=#borkchain{}) ->
            ?MODULE ! {exit, "Borkchain should be empty.. BORKBORK!!"}
     end.
 
+%% Creates the "next block" on the blockchain
 next_block(B=#borkchain{}, ID, Hash) ->
     %% Get the chain and take out the last item
     C = B#borkchain.the_chain,
@@ -88,13 +89,21 @@ next_block(B=#borkchain{}, ID, Hash) ->
                    timestamp=calendar:local_time(),
                    id=ID,
                    hash=Hash,
-                   link=crypto:hash(sha512, "Just something temporary..")},
-                        %{Last#block.timestamp,
-                         %Last#block.id,
-                         %Last#block.hash,
-                         %crypto:hash(sha512, Last#block.link)}},
+                   link=make_link_info_hashable({Last#block.timestamp,
+                                                 Last#block.id,
+                                                 Last#block.hash,
+                                                 crypto:hash(sha512, Last#block.link)})},
     Block.
 
+%% What it says on the tin.
+make_link_info_hashable({T, ID, H, HLL}) ->
+    %% Creates a format string, which is in fact a list, with all the info
+    %% then flattens that list.
+    LinkInfo = lists:flatten(io_lib:format("~w, ~w, ~w - ~w", [T, ID, H, HLL])),
+    LinkInfo.
+
+%% This is a Bork-printer
 print_chain(B=#borkchain{}) ->
     C = B#borkchain.the_chain,
+    %% List comprehension, yay.
     [io:format("~p~n", [X]) || X <- C].

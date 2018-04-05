@@ -40,10 +40,10 @@ borkchain:sign_document("Some ID", crypto:hash(sha512, "This is a message")).
 You can see the chain grow. Heh.. Just the length of the chain, as it is.
 
 ## TODO
-- Fix link information in the non-genesis blocks
+~~- Fix link information in the non-genesis blocks
  - Hashing can only be done on a "string" or a <<"binary string">>
  - Need to use `io_lib:format` and possibly `lists:flatten`
- - Combine to form one string that is hashed.
+ - Combine to form one string that is hashed.~~
 - Make certificates that are actually signed
  - RSA keypair for the borkchain service
  - Possibly move to a separate TSS service, idk..
