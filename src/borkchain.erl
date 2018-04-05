@@ -45,10 +45,12 @@ loop(B=#borkchain{}) ->
             %% Create a new block
             NewBlock = next_block(B#borkchain{}, ID, Hash),
             C = B#borkchain.the_chain,
+            %% Add the new block to the chain
+            NewBork = B#borkchain{the_chain = [NewBlock|C]},
             %% Notify the user that a block has been "added"
             Pid ! {successful, "New block added!"},
-            %% Only now we add the block to the chain
-            loop(B#borkchain{the_chain = [NewBlock|C]});
+            print_chain(NewBork),
+            loop(NewBork);
         {exit, Reason} ->
             exit(Reason);
         shutdown ->
@@ -61,7 +63,6 @@ loop(B=#borkchain{}) ->
     end.
 
 %%% Private function?
-
 generate_genesis_block(B=#borkchain{}) ->
     C = B#borkchain.the_chain,
     %% Make sure that the chain is empty
@@ -81,14 +82,19 @@ generate_genesis_block(B=#borkchain{}) ->
 next_block(B=#borkchain{}, ID, Hash) ->
     %% Get the chain and take out the last item
     C = B#borkchain.the_chain,
-    Last = lists:last(C),
+    Last = hd(C),
     %% Create the block record
     Block = #block{seq_nr=Last#block.seq_nr + 1,
                    timestamp=calendar:local_time(),
                    id=ID,
                    hash=Hash,
-                   link={Last#block.timestamp,
-                         Last#block.id,
-                         Last#block.hash,
-                         crypto:hash(sha512, Last#block.link)}},
+                   link=crypto:hash(sha512, "Just something temporary..")},
+                        %{Last#block.timestamp,
+                         %Last#block.id,
+                         %Last#block.hash,
+                         %crypto:hash(sha512, Last#block.link)}},
     Block.
+
+print_chain(B=#borkchain{}) ->
+    C = B#borkchain.the_chain,
+    [io:format("~p~n", [X]) || X <- C].
