@@ -1,6 +1,6 @@
 -module(borkchat_serv).
 -behaviour(gen_server).
--export([start_link/0, stop/0, ask/1]).
+-export([start_link/0, stop/0, ask/1, message/2]).
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2,
          code_change/3, terminate/2]).
 
@@ -16,6 +16,11 @@ stop() ->
 ask(_Question) -> % the question doesn't matter!
     gen_server:call({global, ?MODULE}, question).
 
+%% Somehow lookup the name of the target (ID)
+%% Message to be sent
+message(_ID, _Message) ->
+    gen_server:call({global, ?MODULE}, message).
+
 %%%%%%%%%%%%%%%%%
 %%% CALLBACKS %%%
 %%%%%%%%%%%%%%%%%
@@ -28,6 +33,10 @@ handle_call(question, _From, State) ->
     {ok, Answers} = application:get_env(borkchat, answers),
     Answer = element(random:uniform(tuple_size(Answers)), Answers),
     {reply, Answer, State};
+%% Handles the message delivery
+handle_call(message, _From, State) ->
+    Message = "Some message",
+    {reply, Message, State};
 handle_call(stop, _From, State) ->
     {stop, normal, ok, State};
 handle_call(_Call, _From, State) ->

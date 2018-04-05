@@ -5,10 +5,8 @@
 
 init([]) -> [].
 
-sign_document(_ID, _Hash) ->
-    receive
-        {} -> ok
-    end.
+sign_document() ->
+    ok.
 
 loop() -> 
     receive

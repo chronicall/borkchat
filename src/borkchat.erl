@@ -1,7 +1,7 @@
 -module(borkchat).
 -behaviour(application).
 -export([start/2, stop/1]).
--export([ask/1]).
+-export([ask/1, message/2]).
 
 %%%%%%%%%%%%%%%%%
 %%% CALLBACKS %%%
@@ -22,3 +22,6 @@ stop(_State) ->
 %%%%%%%%%%%%%%%%%
 ask(Question) ->
     borkchat_serv:ask(Question).
+
+message(ID, Message) ->
+    borkchat_serv:message(ID, Message).
