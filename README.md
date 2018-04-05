@@ -1,5 +1,4 @@
 # BORKCHAT
-
 This is a BORK-erific "chat" server that is distributed over erlang nodes.
 
 Idfk..
@@ -23,3 +22,19 @@ application:start(borkchat).
 ```
 
 You can now ask BORKS by running `borkchat:ask(<Some Question>).` and get a BORK back.
+
+# BORKCHAIN
+Okay so. This is.. something? Can create a "chain".
+
+```
+erl -make
+erl -pa ebin/
+```
+Then start the chain and "sign" some documents:
+```
+borkchain:start().
+borkchain:sign_document("Some ID", crypto:hash(sha512, "This is a message")).
+borkchain:sign_document("Some ID", crypto:hash(sha512, "This is a message")).
+borkchain:sign_document("Some ID", crypto:hash(sha512, "This is a message")).
+```
+You can see the chain grow. Heh.. Just the length of the chain, as it is.
