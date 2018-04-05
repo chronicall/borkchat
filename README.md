@@ -37,7 +37,7 @@ borkchain:sign_document("Some ID", crypto:hash(sha512, "This is a message")).
 borkchain:sign_document("Some Other ID", crypto:hash(sha512, "Wow these are boring")).
 borkchain:sign_document("Pupper", crypto:hash(sha512, "I am gud Doggo")).
 ```
-You can see the chain grow. Heh.. Just the length of the chain, as it is.
+You can see the chain grow. The entire chain is printed out with each new block.
 
 ## TODO
 - Fix link information in the non-genesis blocks
