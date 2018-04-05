@@ -41,21 +41,21 @@ You can see the chain grow. Heh.. Just the length of the chain, as it is.
 
 ## TODO
 - Fix link information in the non-genesis blocks
- - Hashing can only be done on a "string" or a <<"binary string">>
- - Need to use `io_lib:format` and possibly `lists:flatten`
- - Combine to form one string that is hashed.
+  - Hashing can only be done on a "string" or a <<"binary string">>
+  - Need to use `io_lib:format` and possibly `lists:flatten`
+  - Combine to form one string that is hashed.
 - Make certificates that are actually signed
- - RSA keypair for the borkchain service
- - Possibly move to a separate TSS service, idk..
+  - RSA keypair for the borkchain service
+  - Possibly move to a separate TSS service, idk..
 - Generalize the borkchain "server" or w/e it should be called
- - Only export the methods we need
-  - Add verified block?
-  - Add block for verification?
-  - ???
+  - Only export the methods we need
+    - Add verified block?
+    - Add block for verification?
+    - ???
 - Implement Mnesia for blockchain distribution and physical storage
- - Make records compatible with Mnesia so it makes sense
-  - Watch out for name collisions!
- - When a new node connects, can it then download the database/blockchain from the network?
+  - Make records compatible with Mnesia so it makes sense
+    - Watch out for name collisions!
+  - When a new node connects, can it then download the database/blockchain from the network?
 - Actually connect this with borkchat, or something similar..
- - Store Borks as the Documents?
- - Proof of Bork!?
+  - Store Borks as the Documents?
+  - Proof of Bork!?
