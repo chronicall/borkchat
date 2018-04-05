@@ -7,7 +7,7 @@ Idfk..
 Navigate to root directory, run `erl -make`
 
 Now, start three terminal instances and navigate to the root directory. Once there, run one of these in each window:
-```
+```bash
 erl -sname a -config config/a -pa ebin/
 erl -sname b -config config/b -pa ebin/
 erl -sname c -config config/c -pa ebin/
@@ -26,16 +26,16 @@ You can now ask BORKS by running `borkchat:ask(<Some Question>).` and get a BORK
 # BORKCHAIN
 Okay so. This is.. something? Can create a "chain".
 
-```
+```bash
 erl -make
 erl -pa ebin/
 ```
 Then start the chain and "sign" some documents:
-```
+```erlang
 borkchain:start().
 borkchain:sign_document("Some ID", crypto:hash(sha512, "This is a message")).
-borkchain:sign_document("Some ID", crypto:hash(sha512, "This is a message")).
-borkchain:sign_document("Some ID", crypto:hash(sha512, "This is a message")).
+borkchain:sign_document("Some Other ID", crypto:hash(sha512, "Wow these are boring")).
+borkchain:sign_document("Pupper", crypto:hash(sha512, "I am gud Doggo")).
 ```
 You can see the chain grow. Heh.. Just the length of the chain, as it is.
 
