@@ -32,6 +32,7 @@ erl -pa ebin/
 ```
 Then start the chain and "sign" some documents:
 ```erlang
+rr(borkchain).
 borkchain:start().
 borkchain:sign_document("Some ID", crypto:hash(sha512, "This is a message")).
 borkchain:sign_document("Some Other ID", crypto:hash(sha512, "Wow these are boring")).
