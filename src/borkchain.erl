@@ -8,14 +8,59 @@
                 hash,
                 link}).
 
-init() -> 
-    loop(#borkchain{the_chain=[]}).
+start() ->
+    register(?MODULE, Pid=spawn(?MODULE, init, [])),
+    Pid.
 
+%% Probably not required.
+start_link() ->
+    register(?MODULE, Pid=spawn_link(?MODULE, init, [])),
+    Pid.
+
+terminate() ->
+    ?MODULE ! shutdown.
+
+%% Initialize the blockchain
+init() ->
+    %% Empty list at first
+    B = #borkchain{the_chain=[]},
+    %% Create the genesis block and start the loop
+    loop(generate_genesis_block(B#borkchain{})).
+
+%% "Sign" a document hash.
+sign_document(ID, Hash) ->
+    %Ref = make_ref(),
+    ?MODULE ! {self(), {sign, ID, Hash}},
+    receive
+        {successful, Msg} ->
+            io:format("~p~n", [Msg])
+    after 5000 ->
+        {error, timeout}
+    end.
+
+%%% The server
 loop(B=#borkchain{}) ->
     receive
-        {} ->
-            loop(B#borkchain{})
+        {Pid, {sign, ID, Hash}} ->
+            %% Create a new block
+            NewBlock = next_block(B#borkchain{}, ID, Hash),
+            C = B#borkchain.the_chain,
+            %% Notify the user that a block has been "added"
+            Pid ! {successful, "New block added!"},
+            %% Only now we add the block to the chain
+            loop(B#borkchain{the_chain = [NewBlock|C]});
+        {exit, Reason} ->
+            exit(Reason);
+        shutdown ->
+            exit(shutdown)
+    after 5000 ->
+        %% Prints out the length of the block chain atm
+        %% Lel.
+        io:format("The length of the chain is ~p~n", [length(B#borkchain.the_chain)]),
+        loop(B#borkchain{})
     end.
+
+%%% Private function?
 
 generate_genesis_block(B=#borkchain{}) ->
     C = B#borkchain.the_chain,
@@ -30,7 +75,7 @@ generate_genesis_block(B=#borkchain{}) ->
            B#borkchain{the_chain = [Block|C]};
        %% If it's not.. something's gone horribly wrong.
        C =/= [] ->
-           {error, "Borkchain should be empty.. BORKBORK!!"}
+           ?MODULE ! {exit, "Borkchain should be empty.. BORKBORK!!"}
     end.
 
 next_block(B=#borkchain{}, ID, Hash) ->
@@ -46,4 +91,4 @@ next_block(B=#borkchain{}, ID, Hash) ->
                          Last#block.id,
                          Last#block.hash,
                          crypto:hash(sha512, Last#block.link)}},
-    B#borkchain{the_chain = [Block|C]}.
+    Block.
